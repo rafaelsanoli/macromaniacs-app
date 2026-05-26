@@ -1,10 +1,10 @@
 import { USE_MOCKS } from "@/constants/config";
-import { mockDailyMacros } from "@/mocks/macros.mock";
 import type { DailyMacros } from "@/types/macros";
 import { api } from "@/lib/api";
+import { useDemoStore } from "@/store/demo.store";
 
 const mockHomeService = {
-  getDailyMacros: async (): Promise<DailyMacros> => mockDailyMacros,
+  getDailyMacros: async (): Promise<DailyMacros> => useDemoStore.getState().dailyMacros,
 };
 
 const apiHomeService = {

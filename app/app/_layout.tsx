@@ -65,7 +65,14 @@ export default function AppTabsLayout() {
       <Tabs.Screen name="barcode-scanner" options={{ href: null }} />
       <Tabs.Screen name="product-review" options={{ href: null }} />
       <Tabs.Screen name="planned-meal" options={{ href: null }} />
+      <Tabs.Screen name="manual-check-in" options={{ href: null }} />
+      <Tabs.Screen name="photo-check-in" options={{ href: null }} />
       <Tabs.Screen name="check-in-success" options={{ href: null }} />
+      <Tabs.Screen name="feed" options={{ href: null }} />
+      <Tabs.Screen name="chat" options={{ href: null }} />
+      <Tabs.Screen name="diet" options={{ href: null }} />
+      <Tabs.Screen name="medals" options={{ href: null }} />
+      <Tabs.Screen name="settings" options={{ href: null }} />
     </Tabs>
   );
 }

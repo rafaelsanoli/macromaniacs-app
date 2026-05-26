@@ -11,6 +11,7 @@ const mockDietService = {
     return mockDietDraft;
   },
   getDraft: async (): Promise<DietDraft> => mockDietDraft,
+  getActiveDiet: async (): Promise<DietPlan> => mockDietPlan,
   confirmDiet: async (): Promise<DietPlan> => mockDietPlan,
 };
 
@@ -21,6 +22,10 @@ const apiDietService = {
   },
   getDraft: async (): Promise<DietDraft> => {
     const response = await api.get<DietDraft>("/diet/active");
+    return response.data;
+  },
+  getActiveDiet: async (): Promise<DietPlan> => {
+    const response = await api.get<DietPlan>("/diet/active");
     return response.data;
   },
   confirmDiet: async (): Promise<DietPlan> => {

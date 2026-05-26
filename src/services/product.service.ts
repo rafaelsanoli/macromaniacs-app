@@ -5,11 +5,19 @@ import type { Product } from "@/types/product";
 
 const mockProductService = {
   getByBarcode: async (_barcode: string): Promise<Product> => mockProduct,
+  createManual: async (product: Product): Promise<Product> => ({
+    ...product,
+    source: "manual",
+  }),
 };
 
 const apiProductService = {
   getByBarcode: async (barcode: string): Promise<Product> => {
     const response = await api.get<Product>(`/products/barcode/${barcode}`);
+    return response.data;
+  },
+  createManual: async (product: Product): Promise<Product> => {
+    const response = await api.post<Product>("/products/manual", product);
     return response.data;
   },
 };

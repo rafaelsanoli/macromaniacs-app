@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { router, type Href } from "expo-router";
 import { Flame, Plus, Utensils } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
@@ -8,17 +7,13 @@ import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { MacroCounterCard } from "@/components/macros/MacroCounterCard";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
-import { LoadingManiac } from "@/components/ui/LoadingManiac";
 import { mockAvatar, mockUser } from "@/mocks/user.mock";
-import { homeService } from "@/services/home.service";
+import { useDemoStore } from "@/store/demo.store";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function HomeScreen() {
   const theme = useAppTheme();
-  const { data: macros, isLoading } = useQuery({
-    queryKey: ["daily-macros"],
-    queryFn: homeService.getDailyMacros,
-  });
+  const macros = useDemoStore((state) => state.dailyMacros);
 
   return (
     <Screen>
@@ -41,11 +36,7 @@ export default function HomeScreen() {
         <Flame color={theme.colors.accent} size={28} />
       </ManiacCard>
 
-      {isLoading || !macros ? (
-        <LoadingManiac />
-      ) : (
-        <MacroCounterCard macros={macros} />
-      )}
+      <MacroCounterCard macros={macros} />
 
       <ManiacCard style={styles.nextMeal}>
         <Utensils color={theme.colors.accent} size={24} />

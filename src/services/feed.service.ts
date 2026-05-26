@@ -1,10 +1,10 @@
 import { USE_MOCKS } from "@/constants/config";
 import { api } from "@/lib/api";
-import { mockFeedPosts } from "@/mocks/feed.mock";
+import { useDemoStore } from "@/store/demo.store";
 import type { FeedPost } from "@/types/feed";
 
 const mockFeedService = {
-  getGroupFeed: async (): Promise<FeedPost[]> => mockFeedPosts,
+  getGroupFeed: async (): Promise<FeedPost[]> => useDemoStore.getState().feedPosts,
 };
 
 const apiFeedService = {

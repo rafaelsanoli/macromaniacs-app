@@ -7,28 +7,28 @@ import { ScreenHeader } from "@/components/layout/ScreenHeader";
 
 const options = [
   {
-    title: "Código de barras",
-    copy: "Produto encontrado via backend Flask depois. Agora é mock.",
+    title: "Codigo de barras",
+    copy: "Produto encontrado via backend Flask depois. Agora e mock.",
     icon: ScanBarcode,
     route: "/app/barcode-scanner" as Href,
   },
   {
-    title: "Refeição planejada",
-    copy: "Confirma almoço, jantar ou lanche da dieta.",
+    title: "Refeicao planejada",
+    copy: "Confirma almoco, jantar ou lanche da dieta.",
     icon: ClipboardList,
     route: "/app/planned-meal" as Href,
   },
   {
     title: "Foto do prato",
-    copy: "IA entra depois. A tela já reserva o fluxo.",
+    copy: "Simula leitura por imagem para fechar o fluxo.",
     icon: Camera,
-    route: "/app/check-in-success" as Href,
+    route: "/app/photo-check-in" as Href,
   },
   {
     title: "Manual",
-    copy: "Registra na raça quando o produto some do mapa.",
+    copy: "Registra na mao quando o produto some do mapa.",
     icon: Keyboard,
-    route: "/app/check-in-success" as Href,
+    route: "/app/manual-check-in" as Href,
   },
 ];
 
@@ -37,7 +37,7 @@ export default function CheckInScreen() {
     <Screen>
       <ScreenHeader
         eyebrow="Check-in"
-        title="Registra a refeição."
+        title="Registra a refeicao."
         subtitle="Dieta registrada. Agora vira jogo."
       />
       <View style={styles.list}>

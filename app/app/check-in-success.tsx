@@ -6,11 +6,12 @@ import { Screen } from "@/components/layout/Screen";
 import { MacroCounterCard } from "@/components/macros/MacroCounterCard";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
-import { mockCheckInResult } from "@/mocks/checkin.mock";
+import { useDemoStore } from "@/store/demo.store";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function CheckInSuccessScreen() {
   const theme = useAppTheme();
+  const result = useDemoStore((state) => state.lastCheckIn);
 
   return (
     <Screen>
@@ -22,12 +23,12 @@ export default function CheckInSuccessScreen() {
           Proteína batida. Hoje você não foi frango.
         </Text>
         <Text style={[styles.copy, { color: theme.colors.mutedText }]}>
-          +{mockCheckInResult.pointsEarned} pontos · Ranking #
-          {mockCheckInResult.rankingPosition} · Feed atualizado.
+          +{result.pointsEarned} pontos · Ranking #{result.rankingPosition} · Feed
+          atualizado.
         </Text>
       </ManiacCard>
 
-      <MacroCounterCard macros={mockCheckInResult.dailyMacros} />
+      <MacroCounterCard macros={result.dailyMacros} />
 
       <View style={styles.medalBlock}>
         <View style={styles.medalTitle}>
@@ -36,7 +37,7 @@ export default function CheckInSuccessScreen() {
             Recompensa desbloqueada
           </Text>
         </View>
-        {mockCheckInResult.unlockedMedals.map((medal) => (
+        {result.unlockedMedals.map((medal) => (
           <MedalBadge key={medal.id} medal={medal} />
         ))}
       </View>

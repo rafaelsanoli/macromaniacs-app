@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { Clock3, Plus } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
@@ -7,17 +6,13 @@ import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { MacroCounterCard } from "@/components/macros/MacroCounterCard";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
-import { LoadingManiac } from "@/components/ui/LoadingManiac";
 import { mockDietPlan } from "@/mocks/diet.mock";
-import { homeService } from "@/services/home.service";
+import { useDemoStore } from "@/store/demo.store";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function MacrosScreen() {
   const theme = useAppTheme();
-  const { data: macros, isLoading } = useQuery({
-    queryKey: ["daily-macros"],
-    queryFn: homeService.getDailyMacros,
-  });
+  const macros = useDemoStore((state) => state.dailyMacros);
 
   return (
     <Screen>
@@ -26,11 +21,7 @@ export default function MacrosScreen() {
         title="O placar do prato."
         subtitle="Consumo, metas e refeições pendentes no mesmo tabuleiro."
       />
-      {isLoading || !macros ? (
-        <LoadingManiac />
-      ) : (
-        <MacroCounterCard macros={macros} />
-      )}
+      <MacroCounterCard macros={macros} />
 
       <View style={styles.meals}>
         {mockDietPlan.meals.map((meal, index) => {

@@ -1,3 +1,4 @@
+import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { Crown, Shirt, Smile } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
@@ -8,10 +9,15 @@ import { OnboardingOptionCard } from "@/components/onboarding/OnboardingOptionCa
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
 import { mockAvatar } from "@/mocks/user.mock";
+import { onboardingService } from "@/services/onboarding.service";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function AvatarOnboardingScreen() {
   const theme = useAppTheme();
+  const saveMutation = useMutation({
+    mutationFn: onboardingService.saveAvatar,
+    onSuccess: () => router.push("/onboarding/body-data"),
+  });
 
   return (
     <Screen>
@@ -47,7 +53,8 @@ export default function AvatarOnboardingScreen() {
       </View>
       <ManiacButton
         label="Salvar avatar"
-        onPress={() => router.push("/onboarding/body-data")}
+        loading={saveMutation.isPending}
+        onPress={() => saveMutation.mutate()}
       />
     </Screen>
   );

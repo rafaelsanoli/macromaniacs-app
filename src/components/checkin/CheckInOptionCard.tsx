@@ -19,7 +19,12 @@ export function CheckInOptionCard({
   const theme = useAppTheme();
 
   return (
-    <TouchableOpacity activeOpacity={0.86} onPress={onPress}>
+    <TouchableOpacity
+      accessibilityLabel={title}
+      accessibilityRole="button"
+      activeOpacity={0.86}
+      onPress={onPress}
+    >
       <ManiacCard style={styles.card}>
         <View style={[styles.icon, { backgroundColor: theme.colors.primary }]}>
           {icon}

@@ -1,3 +1,4 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router, type Href } from "expo-router";
 import { CheckCircle2, Utensils } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
@@ -6,10 +7,20 @@ import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
 import { mockDietPlan } from "@/mocks/diet.mock";
+import { checkInService } from "@/services/checkin.service";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function PlannedMealScreen() {
   const theme = useAppTheme();
+  const queryClient = useQueryClient();
+  const confirmMutation = useMutation({
+    mutationFn: checkInService.confirmPlannedMeal,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["daily-macros"] });
+      queryClient.invalidateQueries({ queryKey: ["feed"] });
+      router.push("/app/check-in-success" as Href);
+    },
+  });
 
   return (
     <Screen>
@@ -41,7 +52,8 @@ export default function PlannedMealScreen() {
       <ManiacButton
         icon={<CheckCircle2 color="#FFFFFF" size={18} />}
         label="Confirmar almoço"
-        onPress={() => router.push("/app/check-in-success" as Href)}
+        loading={confirmMutation.isPending}
+        onPress={() => confirmMutation.mutate()}
       />
     </Screen>
   );

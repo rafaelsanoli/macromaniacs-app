@@ -4,11 +4,16 @@ import { mockGroup } from "@/mocks/group.mock";
 import type { Group } from "@/types/group";
 
 const mockGroupService = {
+  getCurrentGroup: async (): Promise<Group> => mockGroup,
   createGroup: async (): Promise<Group> => mockGroup,
   joinGroup: async (_inviteCode: string): Promise<Group> => mockGroup,
 };
 
 const apiGroupService = {
+  getCurrentGroup: async (): Promise<Group> => {
+    const response = await api.get<Group>("/groups/current");
+    return response.data;
+  },
   createGroup: async (): Promise<Group> => {
     const response = await api.post<Group>("/groups");
     return response.data;
