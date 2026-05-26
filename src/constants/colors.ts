@@ -1,0 +1,18 @@
+export const colors = {
+  darkPurple: "#1A082F",
+  deepPurple: "#2A0F4A",
+  cardPurple: "#35145F",
+  mascotPurple: "#8B4DFF",
+  vibrantPurple: "#9B5CFF",
+  lightLavender: "#C7A6FF",
+  softLavender: "#E9DCFF",
+  offWhite: "#FFF9F0",
+  white: "#FFFFFF",
+  medalGold: "#FFD447",
+  coralAlert: "#FF5A5F",
+  darkInk: "#170B26",
+  mutedTextDark: "#B8A8CE",
+  mutedTextLight: "#6D5A80",
+  successGreen: "#43D675",
+  electricCyan: "#5DF4FF",
+};
