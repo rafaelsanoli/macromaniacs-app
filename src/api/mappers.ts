@@ -252,9 +252,13 @@ export function mapGroup(value: ApiGroup): Group {
   return {
     id: idOf(value),
     name: value.name ?? "",
+    type: value.type,
     inviteCode: value.inviteCode ?? value.invite_code ?? "",
     membersCount: value.membersCount ?? value.members_count ?? 0,
     currentChallenge: value.currentChallenge ?? value.current_challenge ?? "",
+    durationDays: value.durationDays ?? value.duration_days ?? null,
+    mode: value.mode ?? null,
+    privacy: value.privacy ?? "private",
   };
 }
 

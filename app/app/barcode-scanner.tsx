@@ -1,41 +1,54 @@
-import { useEffect } from "react";
 import { router, type Href } from "expo-router";
-import { ScanBarcode } from "lucide-react-native";
+import { Search, ScanBarcode } from "lucide-react-native";
+import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Screen } from "@/components/layout/Screen";
-import { LoadingManiac } from "@/components/ui/LoadingManiac";
+import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
+import { ManiacInput } from "@/components/ui/ManiacInput";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function BarcodeScannerScreen() {
   const theme = useAppTheme();
+  const [barcode, setBarcode] = useState("7891000315507");
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      router.replace("/app/product-review?barcode=7891000315507" as Href);
-    }, 1000);
-
-    return () => clearTimeout(timeout);
-  }, []);
+  const handleSearch = () => {
+    const value = barcode.trim();
+    if (!value) return;
+    router.push(`/app/product-review?barcode=${encodeURIComponent(value)}` as Href);
+  };
 
   return (
-    <Screen scroll={false}>
+    <Screen>
       <View style={styles.container}>
         <Text style={[styles.eyebrow, { color: theme.colors.primarySoft }]}>
           Scanner
         </Text>
         <Text style={[styles.title, { color: theme.colors.text }]}>
-          Mira no código.
+          Codigo de barras
         </Text>
         <ManiacCard strong style={styles.scanner}>
           <View style={[styles.frame, { borderColor: theme.colors.accent }]}>
             <ScanBarcode color={theme.colors.accent} size={96} />
           </View>
           <Text style={[styles.copy, { color: theme.colors.mutedText }]}>
-            Simulando leitura. Depois isso usa Expo Camera e backend Flask.
+            Digite o codigo para buscar o produto. A rota do backend pode trocar isso pela camera.
           </Text>
         </ManiacCard>
-        <LoadingManiac message="Buscando produto..." />
+        <View style={styles.form}>
+          <ManiacInput
+            keyboardType="number-pad"
+            label="Codigo de barras"
+            onChangeText={setBarcode}
+            placeholder="7891000315507"
+            value={barcode}
+          />
+          <ManiacButton
+            icon={<Search color="#FFFFFF" size={18} />}
+            label="Buscar produto"
+            onPress={handleSearch}
+          />
+        </View>
       </View>
     </Screen>
   );
@@ -76,5 +89,9 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     lineHeight: 20,
     textAlign: "center",
+  },
+  form: {
+    gap: 14,
+    marginTop: 18,
   },
 });

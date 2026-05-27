@@ -11,12 +11,21 @@ import { ManiacInput } from "@/components/ui/ManiacInput";
 import { onboardingService } from "@/services/onboarding.service";
 import { useAppTheme } from "@/store/theme.store";
 
+const goals = [
+  { id: "cutting", title: "Cutting", description: "Ficar dentro da meta e bater proteina." },
+  { id: "bulking", title: "Bulking", description: "Bater calorias e nao pular refeicao." },
+  { id: "maintenance", title: "Manutencao", description: "Manter rotina e consistencia." },
+  { id: "recomposition", title: "Recomposicao", description: "Acompanhar dieta e performance." },
+  { id: "compete", title: "Apenas competir", description: "Entrar no ranking com a galera." },
+  { id: "track", title: "Acompanhar dieta", description: "Organizar o plano sem complicar." },
+] as const;
+
 export default function BodyDataScreen() {
   const theme = useAppTheme();
   const [age, setAge] = useState("24");
   const [height, setHeight] = useState("178");
   const [weight, setWeight] = useState("82");
-  const [goal] = useState("performance");
+  const [goal, setGoal] = useState<(typeof goals)[number]["id"]>("cutting");
   const saveMutation = useMutation({
     mutationFn: () => onboardingService.saveBodyData({ age, height, weight, goal }),
     onSuccess: () => router.push("/onboarding/diet-scan"),
@@ -27,39 +36,42 @@ export default function BodyDataScreen() {
       <ScreenHeader
         eyebrow="Dados fisicos"
         title="Calcula o tabuleiro."
-        subtitle="A gente usa isso para organizar suas metas, nao para dar sermao."
+        subtitle="Esses dados organizam seu perfil e seus desafios."
       />
       <View style={styles.grid}>
         <ManiacInput keyboardType="number-pad" label="Idade" onChangeText={setAge} value={age} />
         <ManiacInput
           keyboardType="number-pad"
-          label="Altura"
+          label="Altura em cm"
           onChangeText={setHeight}
           value={height}
         />
         <ManiacInput
           keyboardType="decimal-pad"
-          label="Peso"
+          label="Peso em kg"
           onChangeText={setWeight}
           value={weight}
         />
       </View>
+      <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
+        Objetivo atual
+      </Text>
       <View style={styles.options}>
-        <OnboardingOptionCard
-          description="Bater macros com constancia."
-          selected
-          title="Ganhar performance"
-        />
-        <OnboardingOptionCard
-          description="Organizar dieta sem virar planilha."
-          title="Definir rotina"
-        />
+        {goals.map((item) => (
+          <OnboardingOptionCard
+            key={item.id}
+            description={item.description}
+            onPress={() => setGoal(item.id)}
+            selected={goal === item.id}
+            title={item.title}
+          />
+        ))}
       </View>
       <View style={[styles.notice, { borderColor: theme.colors.border }]}>
         <ShieldAlert color={theme.colors.accent} size={18} />
         <Text style={[styles.noticeText, { color: theme.colors.mutedText }]}>
           Nao substitui medico ou nutricionista. O app gamifica dados fornecidos
-          por voce.
+          por voce e nao prescreve dieta automaticamente.
         </Text>
       </View>
       <ManiacButton
@@ -74,6 +86,11 @@ export default function BodyDataScreen() {
 const styles = StyleSheet.create({
   grid: {
     gap: 12,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "900",
+    marginTop: 18,
   },
   options: {
     gap: 12,

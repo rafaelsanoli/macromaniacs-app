@@ -367,3 +367,50 @@ Railway
 Fly.io
 ou na AWS mesmo nao sei
 ```
+
+## Atualizacao do estado frontend
+
+Depois da ultima revisao, estes pontos tambem ficaram preparados para receber rota real:
+
+- `POST /diet/confirm` recebe o rascunho editado da dieta com `dailyTargets` e `meals`.
+- `POST /groups` recebe `action`, `name`, `durationDays`, `mode` e `privacy` para criar clube ou desafio.
+- `POST /groups/join` recebe `{ inviteCode }`.
+- `POST /checkins/barcode` recebe `{ barcode, servingSize }`, onde `servingSize` e a quantidade consumida em gramas.
+- `POST /checkins/photo` ja envia `multipart/form-data` com a imagem escolhida ou tirada pelo usuario.
+- `POST /feed/:id/reactions` recebe `{ type }`.
+- `GET /groups/:id/ranking` ja pode receber `period` e `metric` via query params.
+
+Valores usados hoje no ranking:
+
+```txt
+period: week | month | all
+metric: points | streak | protein
+```
+
+Payload preparado para confirmar dieta:
+
+```ts
+{
+  dailyTargets: {
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+  };
+  meals: DietMeal[];
+}
+```
+
+Payload preparado para avatar:
+
+```ts
+{
+  skinTone: string;
+  hairStyle: string;
+  hairColor: string;
+  expression: string;
+  outfit: string;
+  accessory?: string | null;
+  background: string;
+}
+```

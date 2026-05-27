@@ -21,7 +21,7 @@ export default function ChatScreen() {
       <ScreenHeader
         eyebrow="Chat"
         title="Resenha do clube"
-        subtitle="Mensagens reais entram pelo backend depois."
+        subtitle="Mensagens do grupo para acompanhar desafios e check-ins."
       />
       {isLoading || !messages ? (
         <LoadingManiac />

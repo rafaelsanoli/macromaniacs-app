@@ -1,15 +1,16 @@
 import { MessageCircle, ThumbsUp } from "lucide-react-native";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Screen } from "@/components/layout/Screen";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { LoadingManiac } from "@/components/ui/LoadingManiac";
 import { ManiacCard } from "@/components/ui/ManiacCard";
-import { useFeed } from "@/hooks/useBackendReadyData";
+import { useFeed, useReactToPost } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function FeedScreen() {
   const theme = useAppTheme();
   const { data: posts, isLoading } = useFeed();
+  const reactionMutation = useReactToPost();
 
   return (
     <Screen>
@@ -23,39 +24,45 @@ export default function FeedScreen() {
       ) : (
         <View style={styles.list}>
           {posts.map((post) => (
-          <ManiacCard key={post.id}>
-            <Text style={[styles.title, { color: theme.colors.text }]}>
-              {post.title}
-            </Text>
-            <Text style={[styles.description, { color: theme.colors.mutedText }]}>
-              {post.description}
-            </Text>
-            {post.macros ? (
-              <Text style={[styles.meta, { color: theme.colors.primarySoft }]}>
-                {post.macros.calories} kcal · {post.macros.protein}g prot ·{" "}
-                {post.macros.carbs}g carb · {post.macros.fat}g fat
+            <ManiacCard key={post.id}>
+              <Text style={[styles.title, { color: theme.colors.text }]}>
+                {post.title}
               </Text>
-            ) : null}
-            <View style={styles.footer}>
-              <View style={styles.footerItem}>
-                <ThumbsUp color={theme.colors.accent} size={16} />
-                <Text style={[styles.footerText, { color: theme.colors.text }]}>
-                  {post.reactions.reduce((sum, reaction) => sum + reaction.count, 0)}
-                </Text>
-              </View>
-              <View style={styles.footerItem}>
-                <MessageCircle color={theme.colors.accent} size={16} />
-                <Text style={[styles.footerText, { color: theme.colors.text }]}>
-                  {post.commentsCount}
-                </Text>
-              </View>
-              {post.points ? (
-                <Text style={[styles.points, { color: theme.colors.accent }]}>
-                  +{post.points} pts
+              <Text style={[styles.description, { color: theme.colors.mutedText }]}>
+                {post.description}
+              </Text>
+              {post.macros ? (
+                <Text style={[styles.meta, { color: theme.colors.primarySoft }]}>
+                  {post.macros.calories} kcal - {post.macros.protein}g prot -{" "}
+                  {post.macros.carbs}g carb - {post.macros.fat}g fat
                 </Text>
               ) : null}
-            </View>
-          </ManiacCard>
+              <View style={styles.footer}>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() =>
+                    reactionMutation.mutate({ postId: post.id, type: "Brabo" })
+                  }
+                  style={styles.footerItem}
+                >
+                  <ThumbsUp color={theme.colors.accent} size={16} />
+                  <Text style={[styles.footerText, { color: theme.colors.text }]}>
+                    {post.reactions.reduce((sum, reaction) => sum + reaction.count, 0)}
+                  </Text>
+                </TouchableOpacity>
+                <View style={styles.footerItem}>
+                  <MessageCircle color={theme.colors.accent} size={16} />
+                  <Text style={[styles.footerText, { color: theme.colors.text }]}>
+                    {post.commentsCount}
+                  </Text>
+                </View>
+                {post.points ? (
+                  <Text style={[styles.points, { color: theme.colors.accent }]}>
+                    +{post.points} pts
+                  </Text>
+                ) : null}
+              </View>
+            </ManiacCard>
           ))}
         </View>
       )}

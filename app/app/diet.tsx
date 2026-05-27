@@ -92,7 +92,8 @@ export default function DietScreen() {
         />
         <ManiacButton
           icon={<Save color={theme.colors.text} size={18} />}
-          label="Editar depois"
+          label="Revisar plano"
+          onPress={() => router.push("/onboarding/diet-review")}
           variant="secondary"
         />
       </View>

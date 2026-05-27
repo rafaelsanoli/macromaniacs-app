@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { MedalBadge } from "@/components/achievements/MedalBadge";
 import { Screen } from "@/components/layout/Screen";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
@@ -7,17 +8,33 @@ import { LoadingManiac } from "@/components/ui/LoadingManiac";
 import { useRanking } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
+const periods = [
+  { label: "Semana", value: "week" },
+  { label: "Mes", value: "month" },
+  { label: "Geral", value: "all" },
+];
+
+const metrics = [
+  { label: "Pontos", value: "points" },
+  { label: "Streak", value: "streak" },
+  { label: "Proteina", value: "protein" },
+];
+
 export default function RankingScreen() {
   const theme = useAppTheme();
-  const { data: ranking, isLoading } = useRanking();
+  const [period, setPeriod] = useState("week");
+  const [metric, setMetric] = useState("points");
+  const { data: ranking, isLoading } = useRanking(period, metric);
 
   return (
     <Screen>
       <ScreenHeader
         eyebrow="Ranking"
         title="A briga da semana."
-        subtitle="Ranking atualizado. Ana abriu 40 pontos."
+        subtitle="Ranking do grupo por periodo e criterio."
       />
+      <ChipRow options={periods} value={period} onChange={setPeriod} />
+      <ChipRow options={metrics} value={metric} onChange={setMetric} />
       {isLoading || !ranking ? (
         <LoadingManiac />
       ) : (
@@ -33,7 +50,7 @@ export default function RankingScreen() {
                     {entry.name}
                   </Text>
                   <Text style={[styles.meta, { color: theme.colors.mutedText }]}>
-                    @{entry.username} · {entry.streak} dias · {entry.points} pts
+                    @{entry.username} - {entry.streak} dias - {entry.points} pts
                   </Text>
                 </View>
               </View>
@@ -50,7 +67,66 @@ export default function RankingScreen() {
   );
 }
 
+function ChipRow({
+  onChange,
+  options,
+  value,
+}: {
+  onChange: (value: string) => void;
+  options: { label: string; value: string }[];
+  value: string;
+}) {
+  const theme = useAppTheme();
+
+  return (
+    <View style={styles.chips}>
+      {options.map((option) => {
+        const selected = option.value === value;
+        return (
+          <Pressable
+            key={option.value}
+            onPress={() => onChange(option.value)}
+            style={[
+              styles.chip,
+              {
+                backgroundColor: selected ? theme.colors.text : theme.colors.card,
+                borderColor: theme.colors.border,
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.chipText,
+                { color: selected ? theme.colors.background : theme.colors.text },
+              ]}
+            >
+              {option.label}
+            </Text>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
+  chips: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    marginBottom: 12,
+  },
+  chip: {
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  chipText: {
+    fontSize: 12,
+    fontWeight: "900",
+    textTransform: "uppercase",
+  },
   list: {
     gap: 14,
   },

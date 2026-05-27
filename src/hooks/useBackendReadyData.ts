@@ -28,7 +28,7 @@ export const queryKeys = {
   lastCheckIn: ["last-check-in"] as const,
   product: (barcode: string) => ["product", barcode] as const,
   profile: ["profile"] as const,
-  ranking: ["ranking"] as const,
+  ranking: (period = "week", metric = "points") => ["ranking", period, metric] as const,
 };
 
 export function useDailyMacros() {
@@ -49,6 +49,17 @@ export function useFeed() {
   return useQuery({
     queryKey: queryKeys.feed,
     queryFn: () => feedService.getGroupFeed(),
+  });
+}
+
+export function useReactToPost() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ postId, type }: { postId: string; type: string }) =>
+      feedService.reactToPost(postId, type),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.feed });
+    },
   });
 }
 
@@ -106,7 +117,7 @@ function useCheckInMutation<TPayload>(
       queryClient.setQueryData(queryKeys.lastCheckIn, result);
       queryClient.invalidateQueries({ queryKey: queryKeys.dailyMacros });
       queryClient.invalidateQueries({ queryKey: queryKeys.feed });
-      queryClient.invalidateQueries({ queryKey: queryKeys.ranking });
+      queryClient.invalidateQueries({ queryKey: ["ranking"] });
     },
   });
 }
@@ -134,10 +145,10 @@ export function useProfile() {
   });
 }
 
-export function useRanking() {
+export function useRanking(period = "week", metric = "points") {
   return useQuery({
-    queryKey: queryKeys.ranking,
-    queryFn: () => rankingService.getRanking(),
+    queryKey: queryKeys.ranking(period, metric),
+    queryFn: () => rankingService.getRanking({ period, metric }),
   });
 }
 

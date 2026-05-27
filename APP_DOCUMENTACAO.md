@@ -724,3 +724,35 @@ Ainda falta para produção final:
 5. Não mexer em `services`, `api`, `hooks` sem necessidade.
 6. Validar `npm run typecheck`.
 7. Validar `npm run lint`.
+
+## Atualizacao dos ultimos ajustes
+
+Depois da revisao completa contra a documentacao da ideia, estes fluxos deixaram de ser apenas tela e passaram a ter acao/payload preparado:
+
+- Onboarding de avatar com selecao de tom, cabelo, expressao e roupa.
+- Dados fisicos com objetivo selecionavel.
+- Scan de dieta por PDF, imagem ou texto.
+- Revisao de dieta editavel, enviando metas e refeicoes editadas para confirmacao.
+- Entrada em grupo por codigo, criacao de clube e criacao de desafio.
+- Scanner de produto com entrada manual de codigo de barras.
+- Revisao de produto com quantidade consumida em gramas.
+- Foto do prato com Expo Image Picker/Camera.
+- Feed com reacao acionavel.
+- Ranking com filtros de periodo e criterio.
+
+Arquivos principais desses ajustes:
+
+```txt
+app/onboarding/avatar.tsx
+app/onboarding/body-data.tsx
+app/onboarding/diet-scan.tsx
+app/onboarding/diet-review.tsx
+app/onboarding/group-entry.tsx
+app/app/barcode-scanner.tsx
+app/app/product-review.tsx
+app/app/photo-check-in.tsx
+app/app/feed.tsx
+app/app/ranking.tsx
+src/services/*.service.ts
+src/hooks/useBackendReadyData.ts
+```

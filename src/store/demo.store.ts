@@ -17,6 +17,7 @@ type DemoState = {
   lastCheckIn: CheckInResult;
   addCheckIn: (kind: CheckInKind, title: string, macros: MacroSummary) => CheckInResult;
   addChatMessage: (message: string) => ChatMessage;
+  reactToPost: (postId: string, type: string) => FeedPost | null;
 };
 
 const clampPercentage = (value: number) => Math.min(100, Math.round(value));
@@ -94,5 +95,28 @@ export const useDemoStore = create<DemoState>((set, get) => ({
       chatMessages: [...state.chatMessages, newMessage],
     }));
     return newMessage;
+  },
+  reactToPost: (postId, type) => {
+    let updatedPost: FeedPost | null = null;
+    set((state) => ({
+      feedPosts: state.feedPosts.map((post) => {
+        if (post.id !== postId) return post;
+        const existingReaction = post.reactions.find((reaction) => reaction.type === type);
+        const reactions = existingReaction
+          ? post.reactions.map((reaction) =>
+              reaction.type === type
+                ? {
+                    ...reaction,
+                    count: reaction.reactedByMe ? reaction.count - 1 : reaction.count + 1,
+                    reactedByMe: !reaction.reactedByMe,
+                  }
+                : reaction,
+            )
+          : [...post.reactions, { type, count: 1, reactedByMe: true }];
+        updatedPost = { ...post, reactions };
+        return updatedPost;
+      }),
+    }));
+    return updatedPost;
   },
 }));

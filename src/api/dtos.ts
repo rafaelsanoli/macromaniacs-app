@@ -203,12 +203,17 @@ export type ApiGroup = {
   id?: ApiId;
   _id?: ApiId;
   name?: string;
+  type?: "club" | "challenge";
   inviteCode?: string;
   invite_code?: string;
   membersCount?: number;
   members_count?: number;
   currentChallenge?: string;
   current_challenge?: string;
+  durationDays?: number | null;
+  duration_days?: number | null;
+  mode?: string | null;
+  privacy?: "public" | "private";
 };
 
 export type ApiChatMessage = {

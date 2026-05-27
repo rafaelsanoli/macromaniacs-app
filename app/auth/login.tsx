@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { router } from "expo-router";
-import { Apple, Dumbbell, Mail } from "lucide-react-native";
+import { Dumbbell } from "lucide-react-native";
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Screen } from "@/components/layout/Screen";
@@ -52,16 +52,6 @@ export default function LoginScreen() {
           label="Entrar"
           loading={loginMutation.isPending}
           onPress={() => loginMutation.mutate()}
-        />
-        <ManiacButton
-          icon={<Mail color={theme.colors.text} size={18} />}
-          label="Google em breve"
-          variant="secondary"
-        />
-        <ManiacButton
-          icon={<Apple color={theme.colors.text} size={18} />}
-          label="Apple em breve"
-          variant="secondary"
         />
       </View>
       <TouchableOpacity onPress={() => router.push("/auth/register")}>

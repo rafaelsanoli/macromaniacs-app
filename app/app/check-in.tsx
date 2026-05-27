@@ -8,7 +8,7 @@ import { ScreenHeader } from "@/components/layout/ScreenHeader";
 const options = [
   {
     title: "Codigo de barras",
-    copy: "Produto encontrado via backend Flask depois. Agora e mock.",
+    copy: "Busca produto por codigo e registra a porcao consumida.",
     icon: ScanBarcode,
     route: "/app/barcode-scanner" as Href,
   },
@@ -20,7 +20,7 @@ const options = [
   },
   {
     title: "Foto do prato",
-    copy: "Simula leitura por imagem para fechar o fluxo.",
+    copy: "Envia a foto para estimar os macros da refeicao.",
     icon: Camera,
     route: "/app/photo-check-in" as Href,
   },

@@ -1,10 +1,12 @@
 import { router, type Href, useLocalSearchParams } from "expo-router";
 import { CheckCircle2, PackageCheck } from "lucide-react-native";
+import { useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Screen } from "@/components/layout/Screen";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
+import { ManiacInput } from "@/components/ui/ManiacInput";
 import { LoadingManiac } from "@/components/ui/LoadingManiac";
 import { useBarcodeCheckIn, useProduct } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
@@ -15,12 +17,28 @@ export default function ProductReviewScreen() {
   const barcode = params.barcode ?? "7891000315507";
   const { data: product, isLoading } = useProduct(barcode);
   const confirmMutation = useBarcodeCheckIn();
+  const [servingSize, setServingSize] = useState("100");
+  const servingNumber = Number(servingSize.replace(",", ".")) || 100;
+  const factor = servingNumber / 100;
+  const calculatedMacros = useMemo(
+    () => ({
+      calories: Math.round((product?.caloriesPer100g ?? 0) * factor),
+      protein: Math.round((product?.proteinPer100g ?? 0) * factor),
+      carbs: Math.round((product?.carbsPer100g ?? 0) * factor),
+      fat: Math.round((product?.fatPer100g ?? 0) * factor),
+    }),
+    [factor, product],
+  );
+
   const handleConfirm = () => {
-    confirmMutation.mutate({ barcode }, {
-    onSuccess: () => {
-      router.push("/app/check-in-success" as Href);
-    },
-  });
+    confirmMutation.mutate(
+      { barcode, servingSize: servingNumber },
+      {
+        onSuccess: () => {
+          router.push("/app/check-in-success" as Href);
+        },
+      },
+    );
   };
 
   return (
@@ -28,7 +46,7 @@ export default function ProductReviewScreen() {
       <ScreenHeader
         eyebrow="Produto"
         title="Produto encontrado."
-        subtitle="Confere a porção e manda pro contador."
+        subtitle="Confere a porcao e manda pro contador."
       />
       {isLoading || !product ? (
         <LoadingManiac />
@@ -42,15 +60,25 @@ export default function ProductReviewScreen() {
               {product.name}
             </Text>
             <Text style={[styles.brand, { color: theme.colors.mutedText }]}>
-              {product.brand} · porção {product.servingSize}
+              {product.brand} - porcao base {product.servingSize}
             </Text>
           </ManiacCard>
 
+          <View style={styles.form}>
+            <ManiacInput
+              keyboardType="numeric"
+              label="Quantidade consumida em gramas"
+              onChangeText={setServingSize}
+              placeholder="100"
+              value={servingSize}
+            />
+          </View>
+
           <View style={styles.grid}>
-            <MacroTile label="Kcal" value={product.caloriesPer100g} unit="/100g" />
-            <MacroTile label="Proteína" value={product.proteinPer100g} unit="g" />
-            <MacroTile label="Carbo" value={product.carbsPer100g} unit="g" />
-            <MacroTile label="Gordura" value={product.fatPer100g} unit="g" />
+            <MacroTile label="Kcal" value={calculatedMacros.calories} unit="" />
+            <MacroTile label="Proteina" value={calculatedMacros.protein} unit="g" />
+            <MacroTile label="Carbo" value={calculatedMacros.carbs} unit="g" />
+            <MacroTile label="Gordura" value={calculatedMacros.fat} unit="g" />
           </View>
 
           <ManiacButton
@@ -110,6 +138,9 @@ const styles = StyleSheet.create({
   brand: {
     fontSize: 14,
     fontWeight: "800",
+  },
+  form: {
+    marginBottom: 16,
   },
   grid: {
     flexDirection: "row",

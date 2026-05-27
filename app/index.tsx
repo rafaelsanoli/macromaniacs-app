@@ -32,7 +32,7 @@ export default function SplashScreen() {
             Maniac mode ativado.
           </Text>
           <Text style={[styles.cardCopy, { color: theme.colors.mutedText }]}>
-            Demo rodando com mocks. Backend Flask entra depois sem travar o app.
+            Fluxo pronto para conectar no backend Flask e validar a jornada completa.
           </Text>
           <View style={styles.actions}>
             <ManiacButton

@@ -16,6 +16,11 @@ export type DietScanPayload = {
   mimeType?: string;
 };
 
+export type DietConfirmPayload = {
+  dailyTargets: DietDraft["dailyTargets"];
+  meals: DietDraft["meals"];
+};
+
 const mockDietService = {
   scanDiet: async (_payload?: DietScanPayload): Promise<DietDraft> => {
     await wait(700);
@@ -23,7 +28,11 @@ const mockDietService = {
   },
   getDraft: async (): Promise<DietDraft> => mockDietDraft,
   getActiveDiet: async (): Promise<DietPlan> => mockDietPlan,
-  confirmDiet: async (): Promise<DietPlan> => mockDietPlan,
+  confirmDiet: async (payload?: DietConfirmPayload): Promise<DietPlan> => ({
+    ...mockDietPlan,
+    dailyTargets: payload?.dailyTargets ?? mockDietPlan.dailyTargets,
+    meals: payload?.meals ?? mockDietPlan.meals,
+  }),
 };
 
 const apiDietService = {
@@ -60,8 +69,8 @@ const apiDietService = {
     const response = await api.get<ApiEnvelope<ApiDietPlan>>(endpoints.diet.active);
     return mapDietPlan(unwrap(response.data));
   },
-  confirmDiet: async (): Promise<DietPlan> => {
-    const response = await api.post<ApiEnvelope<ApiDietPlan>>(endpoints.diet.confirm);
+  confirmDiet: async (payload?: DietConfirmPayload): Promise<DietPlan> => {
+    const response = await api.post<ApiEnvelope<ApiDietPlan>>(endpoints.diet.confirm, payload);
     return mapDietPlan(unwrap(response.data));
   },
 };

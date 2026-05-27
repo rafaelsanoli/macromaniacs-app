@@ -8,6 +8,7 @@ type ManiacButtonProps = {
   icon?: ReactNode;
   variant?: "primary" | "secondary" | "ghost";
   loading?: boolean;
+  disabled?: boolean;
 };
 
 export function ManiacButton({
@@ -16,6 +17,7 @@ export function ManiacButton({
   icon,
   variant = "primary",
   loading,
+  disabled,
 }: ManiacButtonProps) {
   const theme = useAppTheme();
   const isPrimary = variant === "primary";
@@ -25,7 +27,7 @@ export function ManiacButton({
     <TouchableOpacity
       accessibilityRole="button"
       activeOpacity={0.84}
-      disabled={loading}
+      disabled={loading || disabled}
       onPress={onPress}
       style={[
         styles.button,
@@ -36,6 +38,7 @@ export function ManiacButton({
               ? theme.colors.primary
               : theme.colors.cardStrong,
           borderColor: isGhost ? theme.colors.border : "transparent",
+          opacity: disabled ? 0.45 : 1,
         },
       ]}
     >

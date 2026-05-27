@@ -14,14 +14,27 @@ type BodyDataPayload = {
   goal: string;
 };
 
+export type AvatarPayload = {
+  skinTone: string;
+  hairStyle: string;
+  hairColor: string;
+  expression: string;
+  outfit: string;
+  accessory?: string | null;
+  background: string;
+};
+
 const mockOnboardingService = {
-  saveAvatar: async (): Promise<Avatar> => mockAvatar,
+  saveAvatar: async (payload?: AvatarPayload): Promise<Avatar> => ({
+    ...mockAvatar,
+    ...payload,
+  }),
   saveBodyData: async (_payload: BodyDataPayload): Promise<User> => mockUser,
 };
 
 const apiOnboardingService = {
-  saveAvatar: async (): Promise<Avatar> => {
-    const response = await api.post<ApiEnvelope<ApiAvatar>>(endpoints.avatar.create);
+  saveAvatar: async (payload?: AvatarPayload): Promise<Avatar> => {
+    const response = await api.post<ApiEnvelope<ApiAvatar>>(endpoints.avatar.create, payload);
     return mapAvatar(unwrap(response.data));
   },
   saveBodyData: async (payload: BodyDataPayload): Promise<User> => {
