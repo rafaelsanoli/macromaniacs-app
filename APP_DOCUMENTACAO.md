@@ -1,6 +1,6 @@
 # Documentação do app MacroManiacs
 
-Este documento explica como o app está organizado hoje, o que já existe e onde encontrar as coisas. A ideia é ajudar quem for mexer no design a entender o fluxo sem precisar abrir arquivo por arquivo no escuro.
+Este documento explica como o app está organizado hoje, o que já existe e onde encontrar as coisas. A ideia é ajudar a entender o fluxo sem precisar abrir arquivo por arquivo no escuro.
 
 ## Resumo do app
 
@@ -24,9 +24,7 @@ Splash
 -> Perfil/medalhas
 ```
 
-Hoje o app está funcional com mocks e preparado para receber backend Flask depois.
-
-O design atual é propositalmente básico. A estrutura e os fluxos são mais importantes neste momento.
+Hoje o app está funcional com mocks e preparado para receber o backend Flask depois.
 
 ## Stack
 
@@ -717,7 +715,7 @@ Ainda falta para produção final:
 - gerar APK final;
 - testar APK instalado.
 
-## Checklist rápido para quem pegar o design
+## Checklist rápido pra fazer o design
 
 1. Rodar o app.
 2. Navegar por Home, Check-in, Feed, Ranking e Perfil.

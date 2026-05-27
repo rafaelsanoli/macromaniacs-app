@@ -29,7 +29,7 @@ export function AvatarPreview({ avatar, size = 96 }: AvatarPreviewProps) {
       </View>
       {avatar?.equippedMedals.length ? (
         <View style={[styles.medal, { backgroundColor: theme.colors.accent }]}>
-          <Crown color="#170B26" size={14} />
+          <Crown color="#000000" size={14} />
         </View>
       ) : null}
     </View>

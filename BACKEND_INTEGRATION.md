@@ -359,13 +359,11 @@ O app não precisa ser hospedado para funcionar como APK.
 
 O que precisa estar hospedado ou acessível pelo celular é o backend.
 
-Para hackathon, o ideal é o backend estar em uma URL pública, tipo:
+Para o hackathon em si, o ideal é o backend estar em uma URL pública, tipo:
 
 ```txt
 Render
 Railway
 Fly.io
-Ngrok
+ou na AWS mesmo nao sei
 ```
-
-Se usar `localhost`, só funciona no computador. O celular instalado com APK não enxerga o `localhost` da máquina.

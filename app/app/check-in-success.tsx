@@ -26,7 +26,7 @@ export default function CheckInSuccessScreen() {
     <Screen>
       <ManiacCard strong style={styles.hero}>
         <View style={[styles.trophy, { backgroundColor: theme.colors.accent }]}>
-          <Trophy color="#170B26" size={42} />
+          <Trophy color="#000000" size={42} />
         </View>
         <Text style={[styles.title, { color: theme.colors.text }]}>
           Proteína batida. Hoje você não foi frango.

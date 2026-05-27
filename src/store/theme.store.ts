@@ -7,7 +7,7 @@ type ThemeState = {
 };
 
 export const useThemeStore = create<ThemeState>((set) => ({
-  themeName: "dark",
+  themeName: "light",
   toggleTheme: () =>
     set((state) => ({
       themeName: state.themeName === "dark" ? "light" : "dark",
