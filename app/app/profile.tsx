@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { MedalBadge } from "@/components/achievements/MedalBadge";
@@ -8,15 +7,12 @@ import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
 import { LoadingManiac } from "@/components/ui/LoadingManiac";
-import { profileService } from "@/services/profile.service";
+import { useProfile } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function ProfileScreen() {
   const theme = useAppTheme();
-  const { data: profile, isLoading } = useQuery({
-    queryKey: ["profile"],
-    queryFn: profileService.getProfile,
-  });
+  const { data: profile, isLoading } = useProfile();
 
   return (
     <Screen>

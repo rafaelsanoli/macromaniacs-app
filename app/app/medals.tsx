@@ -1,19 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
 import { StyleSheet, Text, View } from "react-native";
 import { MedalBadge } from "@/components/achievements/MedalBadge";
 import { Screen } from "@/components/layout/Screen";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { LoadingManiac } from "@/components/ui/LoadingManiac";
 import { ManiacCard } from "@/components/ui/ManiacCard";
-import { achievementsService } from "@/services/achievements.service";
+import { useAchievements } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function MedalsScreen() {
   const theme = useAppTheme();
-  const { data, isLoading } = useQuery({
-    queryKey: ["achievements"],
-    queryFn: achievementsService.getAchievements,
-  });
+  const { data, isLoading } = useAchievements();
 
   return (
     <Screen>

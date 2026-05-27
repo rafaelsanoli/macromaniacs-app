@@ -2,13 +2,14 @@ import { MessageCircle, ThumbsUp } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
 import { Screen } from "@/components/layout/Screen";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
+import { LoadingManiac } from "@/components/ui/LoadingManiac";
 import { ManiacCard } from "@/components/ui/ManiacCard";
-import { useDemoStore } from "@/store/demo.store";
+import { useFeed } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function FeedScreen() {
   const theme = useAppTheme();
-  const posts = useDemoStore((state) => state.feedPosts);
+  const { data: posts, isLoading } = useFeed();
 
   return (
     <Screen>
@@ -17,8 +18,11 @@ export default function FeedScreen() {
         title="Movimento do clube"
         subtitle="Check-ins, streaks e provocacoes do grupo."
       />
-      <View style={styles.list}>
-        {posts.map((post) => (
+      {isLoading || !posts ? (
+        <LoadingManiac />
+      ) : (
+        <View style={styles.list}>
+          {posts.map((post) => (
           <ManiacCard key={post.id}>
             <Text style={[styles.title, { color: theme.colors.text }]}>
               {post.title}
@@ -52,8 +56,9 @@ export default function FeedScreen() {
               ) : null}
             </View>
           </ManiacCard>
-        ))}
-      </View>
+          ))}
+        </View>
+      )}
     </Screen>
   );
 }

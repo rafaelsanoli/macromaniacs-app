@@ -6,14 +6,15 @@ import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
 import { ManiacInput } from "@/components/ui/ManiacInput";
-import { useDemoStore } from "@/store/demo.store";
+import { LoadingManiac } from "@/components/ui/LoadingManiac";
+import { useChat, useSendChatMessage } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function ChatScreen() {
   const theme = useAppTheme();
   const [message, setMessage] = useState("");
-  const messages = useDemoStore((state) => state.chatMessages);
-  const addChatMessage = useDemoStore((state) => state.addChatMessage);
+  const { data: messages, isLoading } = useChat();
+  const sendMessage = useSendChatMessage();
 
   return (
     <Screen>
@@ -22,18 +23,22 @@ export default function ChatScreen() {
         title="Resenha do clube"
         subtitle="Mensagens reais entram pelo backend depois."
       />
-      <View style={styles.list}>
-        {messages.map((item) => (
-          <ManiacCard key={item.id} strong={item.type === "system"}>
-            <Text style={[styles.author, { color: theme.colors.primarySoft }]}>
-              {item.authorName}
-            </Text>
-            <Text style={[styles.message, { color: theme.colors.text }]}>
-              {item.message}
-            </Text>
-          </ManiacCard>
-        ))}
-      </View>
+      {isLoading || !messages ? (
+        <LoadingManiac />
+      ) : (
+        <View style={styles.list}>
+          {messages.map((item) => (
+            <ManiacCard key={item.id} strong={item.type === "system"}>
+              <Text style={[styles.author, { color: theme.colors.primarySoft }]}>
+                {item.authorName}
+              </Text>
+              <Text style={[styles.message, { color: theme.colors.text }]}>
+                {item.message}
+              </Text>
+            </ManiacCard>
+          ))}
+        </View>
+      )}
       <View style={styles.form}>
         <ManiacInput
           label="Mensagem"
@@ -44,9 +49,10 @@ export default function ChatScreen() {
         <ManiacButton
           icon={<Send color="#FFFFFF" size={18} />}
           label="Enviar"
+          loading={sendMessage.isPending}
           onPress={() => {
             if (message.trim()) {
-              addChatMessage(message.trim());
+              sendMessage.mutate(message.trim());
               setMessage("");
             }
           }}

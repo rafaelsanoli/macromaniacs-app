@@ -1,4 +1,7 @@
 import { USE_MOCKS } from "@/constants/config";
+import { endpoints } from "@/api/endpoints";
+import { mapRanking, unwrap } from "@/api/mappers";
+import type { ApiEnvelope, ApiRanking } from "@/api/dtos";
 import { api } from "@/lib/api";
 import { mockRanking } from "@/mocks/ranking.mock";
 import type { Ranking } from "@/types/ranking";
@@ -9,8 +12,8 @@ const mockRankingService = {
 
 const apiRankingService = {
   getRanking: async (groupId = "current"): Promise<Ranking> => {
-    const response = await api.get<Ranking>(`/groups/${groupId}/ranking`);
-    return response.data;
+    const response = await api.get<ApiEnvelope<ApiRanking>>(endpoints.groups.ranking(groupId));
+    return mapRanking(unwrap(response.data));
   },
 };
 

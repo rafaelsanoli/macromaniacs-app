@@ -1,4 +1,7 @@
 import { USE_MOCKS } from "@/constants/config";
+import { endpoints } from "@/api/endpoints";
+import { mapAvatar, mapBadge, mapMedal, mapUser, unwrap } from "@/api/mappers";
+import type { ApiAvatar, ApiBadge, ApiEnvelope, ApiMedal, ApiUser } from "@/api/dtos";
 import { api } from "@/lib/api";
 import { mockBadges, mockMedals } from "@/mocks/achievements.mock";
 import { mockAvatar, mockUser } from "@/mocks/user.mock";
@@ -24,8 +27,21 @@ const mockProfileService = {
 
 const apiProfileService = {
   getProfile: async (): Promise<ProfileSummary> => {
-    const response = await api.get<ProfileSummary>("/profile");
-    return response.data;
+    const response = await api.get<
+      ApiEnvelope<{
+        user?: ApiUser;
+        avatar?: ApiAvatar;
+        badges?: ApiBadge[];
+        medals?: ApiMedal[];
+      }>
+    >(endpoints.profile.profile);
+    const data = unwrap(response.data);
+    return {
+      user: mapUser(data.user ?? {}),
+      avatar: mapAvatar(data.avatar ?? {}),
+      badges: (data.badges ?? []).map(mapBadge),
+      medals: (data.medals ?? []).map(mapMedal),
+    };
   },
 };
 

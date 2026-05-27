@@ -7,24 +7,25 @@ import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { MacroCounterCard } from "@/components/macros/MacroCounterCard";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
-import { mockAvatar, mockUser } from "@/mocks/user.mock";
-import { useDemoStore } from "@/store/demo.store";
+import { LoadingManiac } from "@/components/ui/LoadingManiac";
+import { useDailyMacros, useProfile } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function HomeScreen() {
   const theme = useAppTheme();
-  const macros = useDemoStore((state) => state.dailyMacros);
+  const { data: macros, isLoading } = useDailyMacros();
+  const { data: profile } = useProfile();
 
   return (
     <Screen>
       <ScreenHeader
         eyebrow="Home"
-        title={`Bora, ${mockUser.name}.`}
+        title={`Bora, ${profile?.user.name ?? "Maniac"}.`}
         subtitle="Vai deixar a Ana passar?"
       />
 
       <ManiacCard style={styles.profileCard}>
-        <AvatarPreview avatar={mockAvatar} size={84} />
+        {profile?.avatar ? <AvatarPreview avatar={profile.avatar} size={84} /> : null}
         <View style={styles.profileCopy}>
           <Text style={[styles.profileTitle, { color: theme.colors.text }]}>
             Streak pegando fogo.
@@ -36,7 +37,7 @@ export default function HomeScreen() {
         <Flame color={theme.colors.accent} size={28} />
       </ManiacCard>
 
-      <MacroCounterCard macros={macros} />
+      {isLoading || !macros ? <LoadingManiac /> : <MacroCounterCard macros={macros} />}
 
       <ManiacCard style={styles.nextMeal}>
         <Utensils color={theme.colors.accent} size={24} />

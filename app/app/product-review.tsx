@@ -1,5 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { router, type Href } from "expo-router";
+import { router, type Href, useLocalSearchParams } from "expo-router";
 import { CheckCircle2, PackageCheck } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
 import { Screen } from "@/components/layout/Screen";
@@ -7,25 +6,22 @@ import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
 import { LoadingManiac } from "@/components/ui/LoadingManiac";
-import { productService } from "@/services/product.service";
-import { checkInService } from "@/services/checkin.service";
+import { useBarcodeCheckIn, useProduct } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function ProductReviewScreen() {
   const theme = useAppTheme();
-  const queryClient = useQueryClient();
-  const { data: product, isLoading } = useQuery({
-    queryKey: ["product", "7891000315507"],
-    queryFn: () => productService.getByBarcode("7891000315507"),
-  });
-  const confirmMutation = useMutation({
-    mutationFn: checkInService.confirmBarcode,
+  const params = useLocalSearchParams<{ barcode?: string }>();
+  const barcode = params.barcode ?? "7891000315507";
+  const { data: product, isLoading } = useProduct(barcode);
+  const confirmMutation = useBarcodeCheckIn();
+  const handleConfirm = () => {
+    confirmMutation.mutate({ barcode }, {
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["daily-macros"] });
-      queryClient.invalidateQueries({ queryKey: ["feed"] });
       router.push("/app/check-in-success" as Href);
     },
   });
+  };
 
   return (
     <Screen>
@@ -61,7 +57,7 @@ export default function ProductReviewScreen() {
             icon={<CheckCircle2 color="#FFFFFF" size={18} />}
             label="Confirmar check-in"
             loading={confirmMutation.isPending}
-            onPress={() => confirmMutation.mutate()}
+            onPress={handleConfirm}
           />
         </>
       )}

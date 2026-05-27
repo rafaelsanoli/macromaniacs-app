@@ -1,4 +1,7 @@
 import { USE_MOCKS } from "@/constants/config";
+import { endpoints } from "@/api/endpoints";
+import { mapBadge, mapMedal, unwrap } from "@/api/mappers";
+import type { ApiBadge, ApiEnvelope, ApiMedal } from "@/api/dtos";
 import { api } from "@/lib/api";
 import { mockBadges, mockMedals } from "@/mocks/achievements.mock";
 import type { Badge, Medal } from "@/types/achievements";
@@ -18,10 +21,13 @@ const mockAchievementsService = {
 const apiAchievementsService = {
   getAchievements: async (): Promise<AchievementsSummary> => {
     const [badges, medals] = await Promise.all([
-      api.get<Badge[]>("/profile/badges"),
-      api.get<Medal[]>("/profile/medals"),
+      api.get<ApiEnvelope<ApiBadge[]>>(endpoints.profile.badges),
+      api.get<ApiEnvelope<ApiMedal[]>>(endpoints.profile.medals),
     ]);
-    return { badges: badges.data, medals: medals.data };
+    return {
+      badges: unwrap(badges.data).map(mapBadge),
+      medals: unwrap(medals.data).map(mapMedal),
+    };
   },
 };
 

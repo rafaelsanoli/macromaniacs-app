@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router, type Href } from "expo-router";
 import { CheckCircle2, Utensils } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
@@ -6,21 +5,14 @@ import { Screen } from "@/components/layout/Screen";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
-import { mockDietPlan } from "@/mocks/diet.mock";
-import { checkInService } from "@/services/checkin.service";
+import { LoadingManiac } from "@/components/ui/LoadingManiac";
+import { useActiveDiet, usePlannedMealCheckIn } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function PlannedMealScreen() {
   const theme = useAppTheme();
-  const queryClient = useQueryClient();
-  const confirmMutation = useMutation({
-    mutationFn: checkInService.confirmPlannedMeal,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["daily-macros"] });
-      queryClient.invalidateQueries({ queryKey: ["feed"] });
-      router.push("/app/check-in-success" as Href);
-    },
-  });
+  const confirmMutation = usePlannedMealCheckIn();
+  const { data: diet, isLoading } = useActiveDiet();
 
   return (
     <Screen>
@@ -29,8 +21,11 @@ export default function PlannedMealScreen() {
         title="Escolhe a marmita."
         subtitle="Cumpriu o plano? O ranking precisa saber."
       />
-      <View style={styles.list}>
-        {mockDietPlan.meals.map((meal, index) => (
+      {isLoading || !diet ? (
+        <LoadingManiac />
+      ) : (
+        <View style={styles.list}>
+          {diet.meals.map((meal, index) => (
           <ManiacCard key={meal.id} strong={index === 1}>
             <View style={styles.row}>
               <View style={[styles.icon, { backgroundColor: theme.colors.primary }]}>
@@ -47,13 +42,18 @@ export default function PlannedMealScreen() {
               </View>
             </View>
           </ManiacCard>
-        ))}
-      </View>
+          ))}
+        </View>
+      )}
       <ManiacButton
         icon={<CheckCircle2 color="#FFFFFF" size={18} />}
         label="Confirmar almoço"
         loading={confirmMutation.isPending}
-        onPress={() => confirmMutation.mutate()}
+        onPress={() =>
+          confirmMutation.mutate(undefined, {
+            onSuccess: () => router.push("/app/check-in-success" as Href),
+          })
+        }
       />
     </Screen>
   );

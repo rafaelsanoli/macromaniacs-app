@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { CheckCircle2 } from "lucide-react-native";
 import { useState } from "react";
@@ -7,7 +6,7 @@ import { Screen } from "@/components/layout/Screen";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacInput } from "@/components/ui/ManiacInput";
-import { checkInService } from "@/services/checkin.service";
+import { useManualCheckIn } from "@/hooks/useBackendReadyData";
 
 export default function ManualCheckInScreen() {
   const [mealName, setMealName] = useState("Almoco manual");
@@ -15,15 +14,7 @@ export default function ManualCheckInScreen() {
   const [protein, setProtein] = useState("40");
   const [carbs, setCarbs] = useState("70");
   const [fat, setFat] = useState("15");
-  const queryClient = useQueryClient();
-  const confirmMutation = useMutation({
-    mutationFn: checkInService.confirmManual,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["daily-macros"] });
-      queryClient.invalidateQueries({ queryKey: ["feed"] });
-      router.push("/app/check-in-success");
-    },
-  });
+  const confirmMutation = useManualCheckIn();
 
   return (
     <Screen>
@@ -63,7 +54,22 @@ export default function ManualCheckInScreen() {
         icon={<CheckCircle2 color="#FFFFFF" size={18} />}
         label="Confirmar check-in"
         loading={confirmMutation.isPending}
-        onPress={() => confirmMutation.mutate()}
+        onPress={() =>
+          confirmMutation.mutate(
+            {
+              title: mealName,
+              macros: {
+                calories: Number(calories) || 0,
+                protein: Number(protein) || 0,
+                carbs: Number(carbs) || 0,
+                fat: Number(fat) || 0,
+              },
+            },
+            {
+            onSuccess: () => router.push("/app/check-in-success"),
+            },
+          )
+        }
       />
     </Screen>
   );

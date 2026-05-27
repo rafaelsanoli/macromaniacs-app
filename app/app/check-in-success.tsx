@@ -6,12 +6,21 @@ import { Screen } from "@/components/layout/Screen";
 import { MacroCounterCard } from "@/components/macros/MacroCounterCard";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
-import { useDemoStore } from "@/store/demo.store";
+import { LoadingManiac } from "@/components/ui/LoadingManiac";
+import { useLastCheckIn } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function CheckInSuccessScreen() {
   const theme = useAppTheme();
-  const result = useDemoStore((state) => state.lastCheckIn);
+  const { data: result, isLoading } = useLastCheckIn();
+
+  if (isLoading || !result) {
+    return (
+      <Screen>
+        <LoadingManiac />
+      </Screen>
+    );
+  }
 
   return (
     <Screen>

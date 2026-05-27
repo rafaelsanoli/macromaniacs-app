@@ -12,7 +12,7 @@ export default function BarcodeScannerScreen() {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      router.replace("/app/product-review" as Href);
+      router.replace("/app/product-review?barcode=7891000315507" as Href);
     }, 1000);
 
     return () => clearTimeout(timeout);

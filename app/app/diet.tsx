@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { RefreshCcw, Save } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
@@ -8,15 +7,12 @@ import { MacroProgressBar } from "@/components/macros/MacroProgressBar";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
 import { LoadingManiac } from "@/components/ui/LoadingManiac";
-import { dietService } from "@/services/diet.service";
+import { useActiveDiet } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function DietScreen() {
   const theme = useAppTheme();
-  const { data: diet, isLoading } = useQuery({
-    queryKey: ["active-diet"],
-    queryFn: dietService.getActiveDiet,
-  });
+  const { data: diet, isLoading } = useActiveDiet();
 
   return (
     <Screen>

@@ -6,13 +6,14 @@ import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { MacroCounterCard } from "@/components/macros/MacroCounterCard";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
-import { mockDietPlan } from "@/mocks/diet.mock";
-import { useDemoStore } from "@/store/demo.store";
+import { LoadingManiac } from "@/components/ui/LoadingManiac";
+import { useActiveDiet, useDailyMacros } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function MacrosScreen() {
   const theme = useAppTheme();
-  const macros = useDemoStore((state) => state.dailyMacros);
+  const { data: macros, isLoading } = useDailyMacros();
+  const { data: diet } = useActiveDiet();
 
   return (
     <Screen>
@@ -21,10 +22,10 @@ export default function MacrosScreen() {
         title="O placar do prato."
         subtitle="Consumo, metas e refeições pendentes no mesmo tabuleiro."
       />
-      <MacroCounterCard macros={macros} />
+      {isLoading || !macros ? <LoadingManiac /> : <MacroCounterCard macros={macros} />}
 
       <View style={styles.meals}>
-        {mockDietPlan.meals.map((meal, index) => {
+        {(diet?.meals ?? []).map((meal, index) => {
           const done = index === 0;
           return (
             <ManiacCard key={meal.id} strong={done}>

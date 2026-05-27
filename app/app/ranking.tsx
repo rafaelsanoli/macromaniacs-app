@@ -1,19 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
 import { StyleSheet, Text, View } from "react-native";
 import { MedalBadge } from "@/components/achievements/MedalBadge";
 import { Screen } from "@/components/layout/Screen";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { ManiacCard } from "@/components/ui/ManiacCard";
 import { LoadingManiac } from "@/components/ui/LoadingManiac";
-import { rankingService } from "@/services/ranking.service";
+import { useRanking } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function RankingScreen() {
   const theme = useAppTheme();
-  const { data: ranking, isLoading } = useQuery({
-    queryKey: ["ranking"],
-    queryFn: () => rankingService.getRanking(),
-  });
+  const { data: ranking, isLoading } = useRanking();
 
   return (
     <Screen>

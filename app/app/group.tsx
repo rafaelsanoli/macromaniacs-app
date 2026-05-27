@@ -3,34 +3,40 @@ import { MessageCircle, Trophy, UsersRound } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
 import { Screen } from "@/components/layout/Screen";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
+import { LoadingManiac } from "@/components/ui/LoadingManiac";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
-import { mockGroup } from "@/mocks/group.mock";
+import { useGroup } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function GroupScreen() {
   const theme = useAppTheme();
+  const { data: group, isLoading } = useGroup();
 
   return (
     <Screen>
       <ScreenHeader
         eyebrow="Clube"
-        title={mockGroup.name}
-        subtitle={mockGroup.currentChallenge}
+        title={group?.name ?? "Clube"}
+        subtitle={group?.currentChallenge ?? "Carregando clube"}
       />
-      <ManiacCard strong>
-        <View style={styles.row}>
-          <UsersRound color={theme.colors.accent} size={28} />
-          <View>
-            <Text style={[styles.number, { color: theme.colors.text }]}>
-              {mockGroup.membersCount} maniacs
-            </Text>
-            <Text style={[styles.copy, { color: theme.colors.mutedText }]}>
-              Convite {mockGroup.inviteCode}
-            </Text>
+      {isLoading || !group ? (
+        <LoadingManiac />
+      ) : (
+        <ManiacCard strong>
+          <View style={styles.row}>
+            <UsersRound color={theme.colors.accent} size={28} />
+            <View>
+              <Text style={[styles.number, { color: theme.colors.text }]}>
+                {group.membersCount} maniacs
+              </Text>
+              <Text style={[styles.copy, { color: theme.colors.mutedText }]}>
+                Convite {group.inviteCode}
+              </Text>
+            </View>
           </View>
-        </View>
-      </ManiacCard>
+        </ManiacCard>
+      )}
       <View style={styles.actions}>
         <ManiacButton
           icon={<MessageCircle color="#FFFFFF" size={18} />}

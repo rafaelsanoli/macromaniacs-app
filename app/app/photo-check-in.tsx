@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { Camera, CheckCircle2 } from "lucide-react-native";
 import { StyleSheet, Text } from "react-native";
@@ -6,20 +5,12 @@ import { Screen } from "@/components/layout/Screen";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { ManiacButton } from "@/components/ui/ManiacButton";
 import { ManiacCard } from "@/components/ui/ManiacCard";
-import { checkInService } from "@/services/checkin.service";
+import { usePhotoCheckIn } from "@/hooks/useBackendReadyData";
 import { useAppTheme } from "@/store/theme.store";
 
 export default function PhotoCheckInScreen() {
   const theme = useAppTheme();
-  const queryClient = useQueryClient();
-  const confirmMutation = useMutation({
-    mutationFn: checkInService.confirmPhoto,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["daily-macros"] });
-      queryClient.invalidateQueries({ queryKey: ["feed"] });
-      router.push("/app/check-in-success");
-    },
-  });
+  const confirmMutation = usePhotoCheckIn();
 
   return (
     <Screen>
@@ -38,7 +29,11 @@ export default function PhotoCheckInScreen() {
         icon={<CheckCircle2 color="#FFFFFF" size={18} />}
         label="Confirmar foto"
         loading={confirmMutation.isPending}
-        onPress={() => confirmMutation.mutate()}
+        onPress={() =>
+          confirmMutation.mutate(undefined, {
+            onSuccess: () => router.push("/app/check-in-success"),
+          })
+        }
       />
     </Screen>
   );
