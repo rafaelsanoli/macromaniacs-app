@@ -55,6 +55,10 @@ export const endpoints = {
   },
   achievements: {
     list: "/achievements",
+    tags: "/achievements/tags",
+    dailyMissions: "/achievements/daily-missions",
+    claimMission: (missionId: string) => `/achievements/daily-missions/${missionId}/claim`,
+    equipTag: "/profile/tags/equip",
   },
 };
 

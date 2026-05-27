@@ -313,6 +313,10 @@ POST /groups/:id/chat
 GET  /achievements
 GET  /profile/badges
 GET  /profile/medals
+GET  /achievements/tags
+GET  /achievements/daily-missions
+POST /achievements/daily-missions/:id/claim
+POST /profile/tags/equip
 ```
 
 ## Como testar quando as rotas chegarem
@@ -412,5 +416,41 @@ Payload preparado para avatar:
   outfit: string;
   accessory?: string | null;
   background: string;
+}
+```
+
+Payload preparado para equipar tag:
+
+```ts
+{
+  tagId: string;
+  tag_id: string;
+}
+```
+
+Formato esperado para missoes diarias:
+
+```ts
+{
+  missions: [
+    {
+      id: string;
+      title: string;
+      description: string;
+      progress: number;
+      target: number;
+      status: "locked" | "active" | "completed" | "claimed";
+      rewardTag: {
+        id: string;
+        name: string;
+        hashtag: string;
+        description: string;
+        rarity: "common" | "rare" | "epic" | "legendary" | "maniac";
+        unlocked: boolean;
+        equipped: boolean;
+      };
+    }
+  ];
+  equippedTag?: GameTag | null;
 }
 ```

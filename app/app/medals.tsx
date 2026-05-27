@@ -45,6 +45,21 @@ export default function MedalsScreen() {
               </ManiacCard>
             ))}
           </View>
+          <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
+            Tags
+          </Text>
+          <View style={styles.list}>
+            {data.tags.map((tag) => (
+              <ManiacCard key={tag.id} strong={tag.equipped}>
+                <Text style={[styles.badgeName, { color: theme.colors.text }]}>
+                  {tag.hashtag}
+                </Text>
+                <Text style={[styles.badgeText, { color: theme.colors.mutedText }]}>
+                  {tag.description}
+                </Text>
+              </ManiacCard>
+            ))}
+          </View>
         </>
       )}
     </Screen>

@@ -4,6 +4,7 @@ import type {
   ApiChatMessage,
   ApiCheckInResult,
   ApiDailyMacros,
+  ApiDailyMission,
   ApiDietDraft,
   ApiDietMeal,
   ApiDietMealItem,
@@ -11,6 +12,7 @@ import type {
   ApiEnvelope,
   ApiFeedPost,
   ApiGroup,
+  ApiGameTag,
   ApiMacroSummary,
   ApiMacroValue,
   ApiMedal,
@@ -20,7 +22,7 @@ import type {
   ApiReaction,
   ApiUser,
 } from "./dtos";
-import type { Badge, Medal } from "@/types/achievements";
+import type { Badge, DailyMission, GameTag, Medal } from "@/types/achievements";
 import type { Avatar } from "@/types/avatar";
 import type { ChatMessage } from "@/types/chat";
 import type { CheckInResult } from "@/types/checkin";
@@ -72,6 +74,30 @@ export function mapBadge(value: ApiBadge): Badge {
     description: value.description ?? "",
     icon: value.icon ?? "badge",
     unlocked: value.unlocked ?? false,
+  };
+}
+
+export function mapGameTag(value: ApiGameTag): GameTag {
+  return {
+    id: idOf(value),
+    name: value.name ?? "",
+    hashtag: value.hashtag ?? "",
+    description: value.description ?? "",
+    rarity: value.rarity ?? "common",
+    unlocked: value.unlocked ?? false,
+    equipped: value.equipped ?? false,
+  };
+}
+
+export function mapDailyMission(value: ApiDailyMission): DailyMission {
+  return {
+    id: idOf(value),
+    title: value.title ?? "",
+    description: value.description ?? "",
+    progress: value.progress ?? 0,
+    target: value.target ?? 1,
+    status: value.status ?? "locked",
+    rewardTag: mapGameTag(value.rewardTag ?? value.reward_tag ?? {}),
   };
 }
 

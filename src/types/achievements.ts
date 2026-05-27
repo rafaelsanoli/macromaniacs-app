@@ -17,3 +17,23 @@ export type Medal = {
   unlocked: boolean;
   equipped: boolean;
 };
+
+export type GameTag = {
+  id: string;
+  name: string;
+  hashtag: string;
+  description: string;
+  rarity: "common" | "rare" | "epic" | "legendary" | "maniac";
+  unlocked: boolean;
+  equipped: boolean;
+};
+
+export type DailyMission = {
+  id: string;
+  title: string;
+  description: string;
+  progress: number;
+  target: number;
+  status: "locked" | "active" | "completed" | "claimed";
+  rewardTag: GameTag;
+};

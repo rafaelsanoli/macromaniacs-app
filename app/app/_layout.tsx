@@ -72,6 +72,7 @@ export default function AppTabsLayout() {
       <Tabs.Screen name="chat" options={{ href: null }} />
       <Tabs.Screen name="diet" options={{ href: null }} />
       <Tabs.Screen name="medals" options={{ href: null }} />
+      <Tabs.Screen name="tags" options={{ href: null }} />
       <Tabs.Screen name="settings" options={{ href: null }} />
     </Tabs>
   );

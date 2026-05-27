@@ -1,4 +1,4 @@
-import type { Badge, Medal } from "@/types/achievements";
+import type { Badge, DailyMission, GameTag, Medal } from "@/types/achievements";
 
 export const mockMedals: Medal[] = [
   {
@@ -39,5 +39,65 @@ export const mockBadges: Badge[] = [
     description: "Escaneou o primeiro produto.",
     icon: "scan-barcode",
     unlocked: true,
+  },
+];
+
+export const mockGameTags: GameTag[] = [
+  {
+    id: "tag_easy_maniac",
+    name: "EasyManiac",
+    hashtag: "#EasyManiac",
+    description: "Complete o plano alimentar do dia.",
+    rarity: "common",
+    unlocked: true,
+    equipped: true,
+  },
+  {
+    id: "tag_protein_master",
+    name: "ProteinMaster",
+    hashtag: "#ProteinMaster",
+    description: "Bata a meta de proteina por 5 dias seguidos.",
+    rarity: "rare",
+    unlocked: false,
+    equipped: false,
+  },
+  {
+    id: "tag_discipline_flame",
+    name: "DisciplineFlame",
+    hashtag: "#DisciplineFlame",
+    description: "Mantenha a meta por 7 dias consecutivos.",
+    rarity: "epic",
+    unlocked: false,
+    equipped: false,
+  },
+];
+
+export const mockDailyMissions: DailyMission[] = [
+  {
+    id: "mission_daily_plan",
+    title: "Desafio diario",
+    description: "Complete o seu plano alimentar por 1 dia seguido.",
+    progress: 0,
+    target: 1,
+    status: "active",
+    rewardTag: mockGameTags[0],
+  },
+  {
+    id: "mission_protein_master",
+    title: "Mestre das Proteinas",
+    description: "Bata a meta de proteina por 5 dias seguidos.",
+    progress: 0,
+    target: 5,
+    status: "locked",
+    rewardTag: mockGameTags[1],
+  },
+  {
+    id: "mission_focus_streak",
+    title: "Sequencia de Foco",
+    description: "Mantenha a sua meta por 7 dias consecutivos.",
+    progress: 0,
+    target: 7,
+    status: "locked",
+    rewardTag: mockGameTags[2],
   },
 ];

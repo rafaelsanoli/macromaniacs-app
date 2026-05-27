@@ -20,6 +20,7 @@ import type { Product } from "@/types/product";
 
 export const queryKeys = {
   achievements: ["achievements"] as const,
+  dailyMissions: ["daily-missions"] as const,
   activeDiet: ["active-diet"] as const,
   chat: ["chat"] as const,
   dailyMacros: ["daily-macros"] as const,
@@ -156,5 +157,35 @@ export function useAchievements() {
   return useQuery({
     queryKey: queryKeys.achievements,
     queryFn: achievementsService.getAchievements,
+  });
+}
+
+export function useDailyMissions() {
+  return useQuery({
+    queryKey: queryKeys.dailyMissions,
+    queryFn: achievementsService.getDailyMissions,
+  });
+}
+
+export function useClaimMission() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (missionId: string) => achievementsService.claimMission(missionId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.dailyMissions });
+      queryClient.invalidateQueries({ queryKey: queryKeys.achievements });
+    },
+  });
+}
+
+export function useEquipTag() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (tagId: string) => achievementsService.equipTag(tagId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.dailyMissions });
+      queryClient.invalidateQueries({ queryKey: queryKeys.achievements });
+      queryClient.invalidateQueries({ queryKey: queryKeys.profile });
+    },
   });
 }

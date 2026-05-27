@@ -42,6 +42,29 @@ export type ApiBadge = {
   unlocked?: boolean;
 };
 
+export type ApiGameTag = {
+  id?: ApiId;
+  _id?: ApiId;
+  name?: string;
+  hashtag?: string;
+  description?: string;
+  rarity?: "common" | "rare" | "epic" | "legendary" | "maniac";
+  unlocked?: boolean;
+  equipped?: boolean;
+};
+
+export type ApiDailyMission = {
+  id?: ApiId;
+  _id?: ApiId;
+  title?: string;
+  description?: string;
+  progress?: number;
+  target?: number;
+  status?: "locked" | "active" | "completed" | "claimed";
+  rewardTag?: ApiGameTag;
+  reward_tag?: ApiGameTag;
+};
+
 export type ApiAvatar = {
   id?: ApiId;
   _id?: ApiId;

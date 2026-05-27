@@ -148,6 +148,7 @@ app/app/ranking.tsx
 app/app/chat.tsx
 app/app/profile.tsx
 app/app/medals.tsx
+app/app/tags.tsx
 app/app/diet.tsx
 app/app/settings.tsx
 ```
@@ -471,6 +472,31 @@ Dados vêm de:
 useAchievements()
 ```
 
+### Tags e missoes
+
+Arquivo:
+
+```txt
+app/app/tags.tsx
+```
+
+Mostra:
+
+- tag equipada;
+- missoes diarias;
+- progresso da missao;
+- tag liberada por cada missao;
+- acao de resgatar missao;
+- acao de equipar tag.
+
+Dados vem de:
+
+```txt
+useDailyMissions()
+useClaimMission()
+useEquipTag()
+```
+
 ### Dieta
 
 Arquivo:
@@ -579,6 +605,9 @@ useManualCheckIn
 useProfile
 useRanking
 useAchievements
+useDailyMissions
+useClaimMission
+useEquipTag
 ```
 
 ### Services
@@ -739,6 +768,7 @@ Depois da revisao completa contra a documentacao da ideia, estes fluxos deixaram
 - Foto do prato com Expo Image Picker/Camera.
 - Feed com reacao acionavel.
 - Ranking com filtros de periodo e criterio.
+- Tags de jogo e missoes diarias.
 
 Arquivos principais desses ajustes:
 
@@ -753,6 +783,7 @@ app/app/product-review.tsx
 app/app/photo-check-in.tsx
 app/app/feed.tsx
 app/app/ranking.tsx
+app/app/tags.tsx
 src/services/*.service.ts
 src/hooks/useBackendReadyData.ts
 ```

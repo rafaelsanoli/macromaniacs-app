@@ -44,8 +44,13 @@ export default function ProfileScreen() {
           </View>
           <View style={styles.actions}>
             <ManiacButton
+              label="Tags e missoes"
+              onPress={() => router.push("/app/tags")}
+            />
+            <ManiacButton
               label="Ver medalhas"
               onPress={() => router.push("/app/medals")}
+              variant="secondary"
             />
             <ManiacButton
               label="Ver dieta"
